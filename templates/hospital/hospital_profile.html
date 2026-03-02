@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Hospital Profile{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-hospital me-2 text-primary"></i>Hospital Profile</h5>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Hospital Name *</label>
+                    {{ form.name }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Phone</label>
+                    {{ form.phone }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Website</label>
+                    {{ form.website }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">City *</label>
+                    {{ form.city }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Country</label>
+                    {{ form.country }}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label fw-semibold">Address *</label>
+                    {{ form.address }}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label fw-semibold">Description</label>
+                    {{ form.description }}
+                </div>
+                <div class="col-md-12 mb-2">
+                    <label class="form-label fw-semibold"><i class="fas fa-map-marker-alt me-1 text-danger"></i>Location (GPS)</label>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Latitude</label>
+                            {{ form.latitude }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small">Longitude</label>
+                            {{ form.longitude }}
+                        </div>
+                    </div>
+                    <div class="text-muted small mt-1">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Find coordinates at <a href="https://www.latlong.net" target="_blank">latlong.net</a>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-2"></i>Save Profile
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

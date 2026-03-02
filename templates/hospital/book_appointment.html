@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Book Appointment - MediCare HMS{% endblock %}
+{% block content %}
+<div class="card" style="max-width:600px;margin:auto;">
+    <div class="card-header py-3">
+        <h5 class="mb-0"><i class="fas fa-calendar-plus me-2 text-primary"></i>Book Appointment</h5>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label fw-semibold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary w-100 py-2">
+                <i class="fas fa-check me-2"></i>Confirm Appointment
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

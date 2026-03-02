@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Doctors{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0 fw-bold">Find Doctors</h4>
+</div>
+<div class="card mb-4">
+    <div class="card-body py-3">
+        <form method="get" class="row g-2">
+            <div class="col-md-4">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Name or specialization...">
+            </div>
+            <div class="col-md-3">
+                <select name="dept" class="form-select">
+                    <option value="">All Departments</option>
+                    {% for d in departments %}
+                    <option value="{{ d.pk }}" {% if selected_dept == d.pk|stringformat:"s" %}selected{% endif %}>{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="city" class="form-select">
+                    <option value="">All Cities</option>
+                    {% for c in cities %}
+                    <option value="{{ c }}" {% if selected_city == c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100"><i class="fas fa-search me-1"></i>Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3">
+{% for doctor in doctors %}
+<div class="col-md-4">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width:50px;height:50px;font-size:1.2rem;">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-bold">Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h6>
+                    <small class="text-primary">{{ doctor.specialization }}</small>
+                </div>
+            </div>
+            {% if doctor.hospital %}<p class="mb-1 small"><i class="fas fa-hospital me-2 text-muted"></i>{{ doctor.hospital.name }}</p>{% endif %}
+            {% if doctor.department %}<p class="mb-1 small"><i class="fas fa-building me-2 text-muted"></i>{{ doctor.department }}</p>{% endif %}
+            {% if doctor.city %}<p class="mb-1 small"><i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ doctor.city }}</p>{% endif %}
+            <p class="mb-1 small"><i class="fas fa-clock me-2 text-muted"></i>{{ doctor.experience_years }} yrs experience</p>
+            <p class="mb-0 text-success fw-semibold small"><i class="fas fa-dollar-sign me-1"></i>Fee: ${{ doctor.consultation_fee }}</p>
+        </div>
+        <div class="card-footer bg-transparent">
+            <a href="{% url 'doctor_detail' doctor.pk %}" class="btn btn-outline-primary btn-sm w-100">View Profile</a>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-12"><div class="alert alert-info">No doctors found.</div></div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Appointment Detail - MediCare HMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header py-3"><h5 class="mb-0">Appointment Details</h5></div>
+            <div class="card-body">
+                <div class="row mb-2"><div class="col-5 text-muted">Patient</div><div class="col-7 fw-semibold">{{ appointment.patient }}</div></div>
+                <div class="row mb-2"><div class="col-5 text-muted">Doctor</div><div class="col-7 fw-semibold">{{ appointment.doctor }}</div></div>
+                <div class="row mb-2"><div class="col-5 text-muted">Date</div><div class="col-7">{{ appointment.appointment_date }}</div></div>
+                <div class="row mb-2"><div class="col-5 text-muted">Time</div><div class="col-7">{{ appointment.appointment_time }}</div></div>
+                <div class="row mb-2"><div class="col-5 text-muted">Status</div><div class="col-7"><span class="badge badge-{{ appointment.status|lower }}">{{ appointment.status }}</span></div></div>
+                {% if appointment.symptoms %}
+                <div class="row mb-2"><div class="col-5 text-muted">Symptoms</div><div class="col-7">{{ appointment.symptoms }}</div></div>
+                {% endif %}
+                {% if appointment.notes %}
+                <div class="row mb-2"><div class="col-5 text-muted">Notes</div><div class="col-7">{{ appointment.notes }}</div></div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if medical_record %}
+        <div class="card mb-4">
+            <div class="card-header py-3"><h5 class="mb-0">Medical Record</h5></div>
+            <div class="card-body">
+                <div class="row mb-2"><div class="col-5 text-muted">Diagnosis</div><div class="col-7">{{ medical_record.diagnosis }}</div></div>
+                {% if medical_record.prescription %}
+                <div class="row mb-2"><div class="col-5 text-muted">Prescription</div><div class="col-7">{{ medical_record.prescription }}</div></div>
+                {% endif %}
+                {% if medical_record.follow_up_date %}
+                <div class="row mb-2"><div class="col-5 text-muted">Follow-up</div><div class="col-7">{{ medical_record.follow_up_date }}</div></div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if is_doctor or is_admin %}
+    <div class="col-md-6">
+        {% if status_form %}
+        <div class="card mb-4">
+            <div class="card-header py-3"><h5 class="mb-0">Update Status</h5></div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in status_form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" name="update_status" class="btn btn-primary btn-sm">Update</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if record_form %}
+        <div class="card">
+            <div class="card-header py-3"><h5 class="mb-0">{% if medical_record %}Edit{% else %}Add{% endif %} Medical Record</h5></div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in record_form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" name="add_record" class="btn btn-success btn-sm">Save Record</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+<a href="{% url 'appointment_list' %}" class="btn btn-outline-secondary mt-2">
+    <i class="fas fa-arrow-left me-2"></i>Back to List
+</a>
+{% endblock %}

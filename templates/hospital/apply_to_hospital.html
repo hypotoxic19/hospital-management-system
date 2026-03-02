@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Apply to Hospital - MediCare HMS{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header py-3">
+                <h5 class="mb-0"><i class="fas fa-paper-plane me-2 text-primary"></i>Apply to a Hospital</h5>
+            </div>
+            <div class="card-body p-4">
+                {% if not doctor.specialization %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please <a href="{% url 'doctor_profile' %}">complete your profile</a> before applying.
+                </div>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Application
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header py-3"><h6 class="mb-0">Available Hospitals</h6></div>
+            <div class="list-group list-group-flush">
+                {% for h in hospitals %}
+                <div class="list-group-item">
+                    <div class="fw-semibold">{{ h.name }}</div>
+                    <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ h.city }}, {{ h.country }}</small>
+                    {% if h.description %}<p class="mb-0 small mt-1">{{ h.description|truncatewords:15 }}</p>{% endif %}
+                </div>
+                {% empty %}
+                <div class="list-group-item text-muted">No hospitals registered yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

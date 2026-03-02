@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Apply to Hospital{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-paper-plane me-2 text-primary"></i>Apply to a Hospital</h5>
+            </div>
+            <div class="card-body p-4">
+                {% if not doctor.specialization %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please <a href="{% url 'doctor_profile' %}">complete your profile</a> before applying.
+                </div>
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select Hospital *</label>
+                        {{ form.hospital }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Cover Letter</label>
+                        {{ form.cover_letter }}
+                        <div class="text-muted small mt-1">Introduce yourself and explain why you want to join.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-paper-plane me-2"></i>Send Application
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history me-2"></i>My Applications</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr><th>Hospital</th><th>City</th><th>Applied</th><th>Status</th><th>Response</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for app in applications %}
+                    <tr>
+                        <td class="fw-semibold">{{ app.hospital.name }}</td>
+                        <td class="text-muted small">{{ app.hospital.city }}</td>
+                        <td class="text-muted small">{{ app.applied_at|date:"M d, Y" }}</td>
+                        <td>
+                            <span class="badge-{{ app.status|lower }}">
+                                {% if app.status == 'PENDING' %}<i class="fas fa-clock me-1"></i>
+                                {% elif app.status == 'ACCEPTED' %}<i class="fas fa-check me-1"></i>
+                                {% else %}<i class="fas fa-times me-1"></i>{% endif %}
+                                {{ app.status }}
+                            </span>
+                        </td>
+                        <td class="text-muted small">{{ app.response_message|default:"—"|truncatechars:40 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-2x d-block mb-2 opacity-50"></i>
+                        No applications yet.
+                    </td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

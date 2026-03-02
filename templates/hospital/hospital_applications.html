@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Applications - MediCare HMS{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2 text-primary"></i>Doctor Applications</h4>
+    <div>
+        <span class="badge bg-warning text-dark me-1">{{ pending.count }} Pending</span>
+        <span class="badge bg-success me-1">{{ accepted.count }} Accepted</span>
+        <span class="badge bg-danger">{{ rejected.count }} Rejected</span>
+    </div>
+</div>
+
+<!-- Pending -->
+<div class="card mb-4">
+    <div class="card-header py-3 bg-warning bg-opacity-10">
+        <h6 class="mb-0 fw-bold text-warning"><i class="fas fa-clock me-2"></i>Pending Applications ({{ pending.count }})</h6>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light"><tr><th>Doctor</th><th>Specialization</th><th>Location</th><th>Experience</th><th>Applied</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for app in pending %}
+            <tr>
+                <td>
+                    <div class="fw-semibold">Dr. {{ app.doctor.user.get_full_name|default:app.doctor.user.username }}</div>
+                    <small class="text-muted">{{ app.doctor.user.email }}</small>
+                </td>
+                <td>{{ app.doctor.specialization }}</td>
+                <td>{{ app.doctor.city|default:"—" }}</td>
+                <td>{{ app.doctor.experience_years }} yrs</td>
+                <td><small>{{ app.applied_at|date:"d M Y" }}</small></td>
+                <td>
+                    <a href="{% url 'review_application' app.pk %}" class="btn btn-sm btn-primary">Review</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-3">No pending applications.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Accepted -->
+<div class="card mb-4">
+    <div class="card-header py-3 bg-success bg-opacity-10">
+        <h6 class="mb-0 fw-bold text-success"><i class="fas fa-check-circle me-2"></i>Accepted Doctors ({{ accepted.count }})</h6>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light"><tr><th>Doctor</th><th>Specialization</th><th>Location</th><th>Reviewed</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for app in accepted %}
+            <tr>
+                <td><div class="fw-semibold">Dr. {{ app.doctor.user.get_full_name|default:app.doctor.user.username }}</div></td>
+                <td>{{ app.doctor.specialization }}</td>
+                <td>{{ app.doctor.city|default:"—" }}</td>
+                <td><small>{{ app.reviewed_at|date:"d M Y"|default:"—" }}</small></td>
+                <td><a href="{% url 'review_application' app.pk %}" class="btn btn-sm btn-outline-secondary">Update</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center text-muted py-3">No accepted doctors yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Rejected -->
+<div class="card">
+    <div class="card-header py-3 bg-danger bg-opacity-10">
+        <h6 class="mb-0 fw-bold text-danger"><i class="fas fa-times-circle me-2"></i>Rejected Applications ({{ rejected.count }})</h6>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light"><tr><th>Doctor</th><th>Specialization</th><th>Reviewed</th><th>Action</th></tr></thead>
+            <tbody>
+            {% for app in rejected %}
+            <tr>
+                <td><div class="fw-semibold">Dr. {{ app.doctor.user.get_full_name|default:app.doctor.user.username }}</div></td>
+                <td>{{ app.doctor.specialization }}</td>
+                <td><small>{{ app.reviewed_at|date:"d M Y"|default:"—" }}</small></td>
+                <td><a href="{% url 'review_application' app.pk %}" class="btn btn-sm btn-outline-secondary">Update</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted py-3">No rejected applications.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

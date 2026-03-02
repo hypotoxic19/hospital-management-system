@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Profile - MediCare HMS{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-user-md me-2 text-primary"></i>My Doctor Profile</h5>
+        <a href="{% url 'my_applications' %}" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-clipboard-list me-1"></i>My Applications
+        </a>
+    </div>
+    <div class="card-body p-4">
+        <form method="post">
+            {% csrf_token %}
+
+            <h6 class="text-muted fw-bold mb-3 border-bottom pb-2">Professional Info</h6>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">{{ form.specialization.label }}</label>
+                    {{ form.specialization }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">{{ form.qualification.label }}</label>
+                    {{ form.qualification }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-semibold">{{ form.experience_years.label }}</label>
+                    {{ form.experience_years }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-semibold">{{ form.consultation_fee.label }}</label>
+                    {{ form.consultation_fee }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-semibold">{{ form.department.label }}</label>
+                    {{ form.department }}
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-semibold">{{ form.available_days.label }}</label>
+                    {{ form.available_days }}
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-semibold">{{ form.bio.label }}</label>
+                    {{ form.bio }}
+                </div>
+            </div>
+
+            <h6 class="text-muted fw-bold mb-3 border-bottom pb-2 mt-2">
+                <i class="fas fa-map-marker-alt me-2"></i>Location
+            </h6>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">{{ form.city.label }}</label>
+                    {{ form.city }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">{{ form.address.label }}</label>
+                    {{ form.address }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">{{ form.latitude.label }}</label>
+                    {{ form.latitude }}
+                    <div class="text-muted small mt-1">{{ form.latitude.help_text }}</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">{{ form.longitude.label }}</label>
+                    {{ form.longitude }}
+                    <div class="text-muted small mt-1">{{ form.longitude.help_text }}</div>
+                </div>
+            </div>
+            <div class="alert alert-info py-2 small">
+                <i class="fas fa-info-circle me-1"></i>
+                To find your coordinates: go to <a href="https://maps.google.com" target="_blank">Google Maps</a>, right-click your location, and copy the coordinates.
+            </div>
+
+            <h6 class="text-muted fw-bold mb-3 border-bottom pb-2 mt-2">Availability</h6>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="form-check form-switch mt-2">
+                        {{ form.is_available }}
+                        <label class="form-check-label fw-semibold ms-2">Available for appointments</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-2"></i>Save Profile
+            </button>
+            <a href="{% url 'doctor_apply' %}" class="btn btn-outline-success ms-2">
+                <i class="fas fa-paper-plane me-2"></i>Apply to a Hospital
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}
